@@ -1,0 +1,22 @@
+3#Warning: No borrar, ni modificar
+Manuel#Nombre: No borrar, ni modificar
+de la cruz#Apellido paterno: No borrar, ni modificar
+carrillo#Apellido materno: No borrar, ni modificar
+Constitucion#Domicilio: No borrar, ni modificar
+Colombia#Pais: No borrar, ni modificar
+5000#Deposito: No borrar, ni modificar
+#######################################
+Jesus#Nombre: No borrar, ni modificar
+c-kan#Apellido paterno: No borrar, ni modificar
+Porta#Apellido materno: No borrar, ni modificar
+En boca de tantos#Domicilio: No borrar, ni modificar
+Espa¤a#Pais: No borrar, ni modificar
+10000#Deposito: No borrar, ni modificar
+#######################################
+h#Nombre: No borrar, ni modificar
+h#Apellido paterno: No borrar, ni modificar
+h#Apellido materno: No borrar, ni modificar
+h#Domicilio: No borrar, ni modificar
+h#Pais: No borrar, ni modificar
+h#Deposito: No borrar, ni modificar
+#######################################
