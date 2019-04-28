@@ -147,7 +147,6 @@ void fnc_menu_crear_cuentas(){
     int iDeposito;
     TAB; printf("Deposito: "); 
     scanf("%i",&iDeposito);
-    char verificar_deposito[10];
 
     if( (iDeposito % 100) == 0){
         campos_correcto++;
@@ -829,6 +828,11 @@ void actualizar_base_de_datos(){
 
     int i;
     for(i=1; i <= contadorID; i++){
+        
+        // Guardar el id de la cuenta
+        sprintf(xCampos,"%i~ ID: No borrar, ni modificar\n",Usuarios[i].ID);
+        fputs(xCampos,archivo);
+
         // Guardar el nombre
         sprintf(xCampos,"%s~ Nombre: No borrar, ni modificar\n",Usuarios[i].Nombre);
         fputs(xCampos,archivo);
@@ -886,6 +890,12 @@ void inicializar_programa(){
         
         int i;
         for(i=1; i <= contadorID; i++){
+
+            // Obtener el id de la cuenta
+            fgets(xCampos,250,archivo);
+            strtok(xCampos,"~");
+            Usuarios[i].ID = atoi(xCampos);
+
             // Obtener el nombre
             fgets(xCampos,250,archivo);
             strtok(xCampos,"~");
