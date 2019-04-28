@@ -39,6 +39,11 @@ int main(){
             fnc_menu_modificar_cuentas();
             break;
 
+            case '4':
+            BORRAR_LA_PANTALLA;
+            fnc_menu_eliminar_cuentas();
+            break;
+
             case '5':
             BORRAR_LA_PANTALLA;
             fnc_menu_ver_cuentas();
@@ -52,6 +57,11 @@ int main(){
             case '7':
             BORRAR_LA_PANTALLA;
             fnc_deposito_de_cuentas();
+            break;
+
+            case '8':
+            BORRAR_LA_PANTALLA;
+            fnc_menu_retirar_deposito();
             break;
         }
 
