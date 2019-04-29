@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <ctype.h>
-#include "variables_globales.h"
-#include "funciones.h"
+#include "banco.h"
 
 
 int main(){

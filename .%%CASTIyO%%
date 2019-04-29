@@ -1,4 +1,4 @@
-4#Warning: No borrar, ni modificar
+6#Warning: No borrar, ni modificar
 1~ ID: No borrar, ni modificar
 Cristian~ Nombre: No borrar, ni modificar
 Jimenez~ Apellido paterno: No borrar, ni modificar
@@ -35,3 +35,21 @@ Playa grande, Revolucion, No. Ext. #1456~ Domicilio: No borrar, ni modificar
 Mexico~ Pais: No borrar, ni modificar
 400~ Deposito: No borrar, ni modificar
 #######################################4
+5~ ID: No borrar, ni modificar
+Edith~ Nombre: No borrar, ni modificar
+Castillo~ Apellido paterno: No borrar, ni modificar
+Flores~ Apellido materno: No borrar, ni modificar
+21/05/2000~ Fecha de nacimiento: No borrar, ni modificar
+Estado de mexico~ Domicilio: No borrar, ni modificar
+Mexico~ Pais: No borrar, ni modificar
+0~ Deposito: No borrar, ni modificar
+#######################################5
+6~ ID: No borrar, ni modificar
+Andres Manuel~ Nombre: No borrar, ni modificar
+Lopez~ Apellido paterno: No borrar, ni modificar
+Obrador~ Apellido materno: No borrar, ni modificar
+02/03/1945~ Fecha de nacimiento: No borrar, ni modificar
+Rancho "A la chingada"~ Domicilio: No borrar, ni modificar
+Mexico~ Pais: No borrar, ni modificar
+100~ Deposito: No borrar, ni modificar
+#######################################6
