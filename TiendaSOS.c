@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -19,13 +20,17 @@ int main(){
 
         switch (opc_menuPrincipal)
         {
-            case '1':
+            case '1':{
                 BORRAR_LA_PANTALLA;
-                fnc_menu_comprar();
-            break;
+                fnc_menu_comprar_con_tarjeta();
+            }break;
+            case '2':{
+                BORRAR_LA_PANTALLA;
+                fnc_menu_comprar_en_efectivo();
+            }break;
         }
 
     }while( opc_menuPrincipal != '0' );
-
+    
     return 0;
 }

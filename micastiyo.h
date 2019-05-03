@@ -43,10 +43,9 @@ void opciones_menu_principal(){
 
     // Deshabilitar opcines miestras usuarios sean 0
     if( inicio_de_session != 0 ){
-        DOBLE_TAB; printf("2 > Modificar cuentas"); SALTO_DE_LINEA;
-        DOBLE_TAB; printf("3 > Transferencia"); SALTO_DE_LINEA;
-        DOBLE_TAB; printf("4 > Deposito"); SALTO_DE_LINEA;
-        DOBLE_TAB; printf("5 > Retiro de deposito"); SALTO_DE_LINEA;
+        DOBLE_TAB; printf("2 > Transferencia"); SALTO_DE_LINEA;
+        DOBLE_TAB; printf("3 > Deposito"); SALTO_DE_LINEA;
+        DOBLE_TAB; printf("4 > Retiro de deposito"); SALTO_DE_LINEA;
     }
 
     // Opcion para salir

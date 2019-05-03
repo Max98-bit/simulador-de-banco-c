@@ -17,7 +17,8 @@ struct Registros{
     char Fecha_de_nacimiento[11];
     char Domicilio[250];
     char Pais[50];
-    int Deposito;
+    double Deposito;
+    char file_act[50];
 }Usuarios[50];
 
 void fnc_mostrar_datos_de_usuarios(int i);
@@ -32,6 +33,7 @@ void fnc_deposito_de_cuentas();
 void fnc_menu_retirar_deposito();
 void actualizar_base_de_datos();
 void inicializar_programa();
+void crear_bd_actividades(int id_cuenta);
 
 // FUNCIONES 
 void fnc_mostrar_datos_de_usuarios(int i){
@@ -50,7 +52,9 @@ void fnc_mostrar_datos_de_usuarios(int i){
         SALTO_DE_LINEA;
     TAB; printf("Pais: %s",Usuarios[i].Pais);
         SALTO_DE_LINEA;
-    TAB; printf("Estado de cuenta: %i",Usuarios[i].Deposito);
+    TAB; printf("Estado de cuenta: %.2f",Usuarios[i].Deposito);
+        SALTO_DE_LINEA;
+    TAB; printf("mi archivo: >> %s <<",Usuarios[i].file_act);
         SALTO_DE_LINEA;
 }
 
@@ -92,19 +96,17 @@ void fnc_menu_crear_cuentas(){
     // Capturar nombre [...]
     SALTO_DE_LINEA;
     fflush(stdin); // Liberar teclado
-    TAB; printf("Nombre: "); 
-    gets(c_campos);
+    TAB; printf("Nombre: ");  gets(c_campos);
     // Volver al menu principal
     if( strcmp(c_campos,"0")  != 0 && atoi(c_campos) == 0 && strlen(c_campos) > 0){
     // [...] Capturar nombre
-    campos_correcto++;
-    strcpy(Usuarios[contadorID].Nombre, c_campos);
+        campos_correcto++;
+        strcpy(Usuarios[contadorID].Nombre, c_campos);
     SALTO_DE_LINEA;
     
     // Capturar apellido paterno
     fflush(stdin); // Liberar teclado
-    TAB; printf("Apellido paterno: "); 
-    gets(c_campos);
+    TAB; printf("Apellido paterno: "); gets(c_campos);
     if( strcmp(c_campos,"0") != 0 && strlen(c_campos) > 0 && atoi(c_campos) == 0 ){
         campos_correcto++;
         strcpy(Usuarios[contadorID].Apellido_paterno, c_campos);
@@ -115,8 +117,7 @@ void fnc_menu_crear_cuentas(){
 
     // Capturar apellido materno
     fflush(stdin); // Liberar teclado
-    TAB; printf("Apellido materno: "); 
-    gets(c_campos);
+    TAB; printf("Apellido materno: "); gets(c_campos);
     if( strcmp(c_campos,"0")  != 0 && strlen(c_campos) > 0 && atoi(c_campos) == 0 ){
         campos_correcto++;
         strcpy(Usuarios[contadorID].Apellido_materno,c_campos);
@@ -127,8 +128,7 @@ void fnc_menu_crear_cuentas(){
 
     // Capturar la fecha de nacimiento
     fflush(stdin);
-    TAB; printf("Fecha de nacimiento: "); 
-    gets(c_campos);
+    TAB; printf("Fecha de nacimiento: "); gets(c_campos);
     int cantidad_de_Separadores = 0;
     int cantidad_de_Letras = strlen(c_campos);
     int cantidad_de_Numeros = 0;
@@ -155,8 +155,7 @@ void fnc_menu_crear_cuentas(){
 
     // Capturar el domicilio
     fflush(stdin); // Liberar teclado
-    TAB; printf("Domicilio: "); 
-    gets(c_campos);
+    TAB; printf("Domicilio: "); gets(c_campos);
     if( strcmp(c_campos,"0")  != 0 && strlen(c_campos) > 0 && atoi(c_campos) == 0 ){
         campos_correcto++;
         strcpy(Usuarios[contadorID].Domicilio, c_campos);
@@ -179,11 +178,11 @@ void fnc_menu_crear_cuentas(){
 
     // Capturar deposito
     fflush(stdin); // Liberar teclado
-    int iDeposito;
+    double iDeposito;
     TAB; printf("Deposito: "); 
-    scanf("%i",&iDeposito);
+    scanf("%lf",&iDeposito);
 
-    if( (iDeposito % 100) == 0){
+    if( ( (int) iDeposito % 100) == 0){
         campos_correcto++;
         Usuarios[contadorID].Deposito = iDeposito;
     }else{
@@ -193,8 +192,10 @@ void fnc_menu_crear_cuentas(){
 
     if(campos_correcto == 7){
         Usuarios[contadorID].ID = contadorID;
+        
         SEPARADOR;
         printf("Usuario registrado exitosamente."); SALTO_DE_LINEA;
+        crear_bd_actividades(contadorID);
         actualizar_base_de_datos(); SALTO_DE_LINEA;
         SALTO_DE_LINEA;
         PAUSA;
@@ -457,6 +458,7 @@ void fnc_menu_eliminar_cuentas(){
         }
 
         if( Encontrado == 1 && buscar_x_id != 0 ){
+            
             SALTO_DE_LINEA;
             fflush(stdin);
             char opc;
@@ -466,9 +468,14 @@ void fnc_menu_eliminar_cuentas(){
             if( opc == 'y' ){
 
                 if( Usuarios[buscar_x_id].Deposito == 0){
+                    
+                    // Eliminar el archivo
+                    remove(Usuarios[buscar_x_id].file_act);
+                    
                     for( i = buscar_x_id; i < contadorID; i++ ){
+
                         // Tipo entero
-                        Usuarios[i].ID = Usuarios[i+1].ID;
+                        Usuarios[i].ID = Usuarios[i+1].ID - 1;
                         Usuarios[i].Deposito = Usuarios[i+1].Deposito;
 
                         // Tipo string
@@ -477,8 +484,13 @@ void fnc_menu_eliminar_cuentas(){
                         strcpy(Usuarios[i].Apellido_materno,Usuarios[i+1].Apellido_materno);
                         strcpy(Usuarios[i].Domicilio,Usuarios[i+1].Domicilio);
                         strcpy(Usuarios[i].Pais,Usuarios[i+1].Pais);
+                        //strcpy(Usuarios[i].file_act, Usuarios[i+1].file_act);
+                        
+                        // Renombrar archivos
+                        rename(Usuarios[i+1].file_act, Usuarios[i].file_act);
+                        printf("nombreViejo(%s) - nombreNuevo(%s)", Usuarios[i+1].file_act, Usuarios[i].file_act);
                     }
-
+                   
                     contadorID--;
                     SALTO_DE_LINEA;
                     SEPARADOR;
@@ -568,11 +580,11 @@ void fnc_transferencia_bancaria(){
         if( cRe == 1 ){
             SALTO_DE_LINEA;
             fflush(stdin);
-            int iTrasferencia;
+            double iTrasferencia;
             TAB; printf("Introduzca la cantidad de la transferencia > ");
-            scanf("%i",&iTrasferencia);
+            scanf("%lf",&iTrasferencia);
 
-            if( (iTrasferencia != 0) && ((iTrasferencia % 100) == 0) &&
+            if( (iTrasferencia != 0) && (( (int) iTrasferencia % 100) == 0) &&
                 ( iTrasferencia <= Usuarios[i_CuentaRemitente].Deposito  &&
                 Usuarios[i_CuentaRemitente].Deposito != 0) ){
                 
@@ -601,9 +613,9 @@ void fnc_transferencia_bancaria(){
                         
                         // Mostrar datos de la tranferencia
                         SALTO_DE_LINEA;
-                        TAB; printf("Tranferido: %i", iTrasferencia); SALTO_DE_LINEA;
-                        TAB; printf("Sub-total: %i - %i",Usuarios[i_CuentaRemitente].Deposito, iTrasferencia); SALTO_DE_LINEA;
-                        TAB; printf("Total: %i",Usuarios[i_CuentaRemitente].Deposito - iTrasferencia); SALTO_DE_LINEA; 
+                        TAB; printf("Tranferido: %.2f", iTrasferencia); SALTO_DE_LINEA;
+                        TAB; printf("Sub-total: %.2f - %.2f",Usuarios[i_CuentaRemitente].Deposito, iTrasferencia); SALTO_DE_LINEA;
+                        TAB; printf("Total: %.2f",Usuarios[i_CuentaRemitente].Deposito - iTrasferencia); SALTO_DE_LINEA; 
                         Usuarios[i_CuentaRemitente].Deposito -= iTrasferencia;    
                         SALTO_DE_LINEA;
 
@@ -616,9 +628,9 @@ void fnc_transferencia_bancaria(){
                         
                         // Mostrar datos de la tranferencia
                         SALTO_DE_LINEA;  
-                        TAB; printf("Tranferido: %i", iTrasferencia); SALTO_DE_LINEA;
-                        TAB; printf("Sub-total: %i + %i",Usuarios[i_CuentaDestinatario].Deposito, iTrasferencia); SALTO_DE_LINEA;
-                        TAB; printf("Total: %i",Usuarios[i_CuentaDestinatario].Deposito + iTrasferencia); SALTO_DE_LINEA;
+                        TAB; printf("Tranferido: %.2f", iTrasferencia); SALTO_DE_LINEA;
+                        TAB; printf("Sub-total: %.2f + %.2f",Usuarios[i_CuentaDestinatario].Deposito, iTrasferencia); SALTO_DE_LINEA;
+                        TAB; printf("Total: %.2f",Usuarios[i_CuentaDestinatario].Deposito + iTrasferencia); SALTO_DE_LINEA;
                         Usuarios[i_CuentaDestinatario].Deposito += iTrasferencia;
 
                         // Mostrar mensaje cuando la transferencia se ralizo con exito
@@ -706,11 +718,11 @@ void fnc_deposito_de_cuentas(){
                 
                 // Modificar / Capturar el deposito
                 fflush(stdin);
-                int x_deposito;
+                double x_deposito;
                 TAB; printf("Cuanto desea depositar? $");
-                scanf("%i",&x_deposito);
+                scanf("%lf",&x_deposito);
                 
-                if( (x_deposito % 100 == 0) && (x_deposito != 0) ){
+                if( ( (int) x_deposito % 100 == 0) && (x_deposito != 0) ){
                         BORRAR_LA_PANTALLA;
                         TAB; printf("BANKO CASTIyO \\(*__*)/");  SALTO_DE_LINEA;
                         TAB; printf("Deposito de cuentas");  SALTO_DE_LINEA;
@@ -718,9 +730,9 @@ void fnc_deposito_de_cuentas(){
                         TAB; printf("Fecha: 26/04/2019");  SALTO_DE_LINEA;
                         fnc_mostrar_datos_de_usuarios(i);
                         SALTO_DE_LINEA;
-                        TAB; printf("Importado: %i",x_deposito); SALTO_DE_LINEA;
-                        TAB; printf("Sub-total: %i + %i", Usuarios[i].Deposito, x_deposito); SALTO_DE_LINEA;
-                        TAB; printf("Total: %i", Usuarios[i].Deposito + x_deposito); SALTO_DE_LINEA;
+                        TAB; printf("Importado: %.2f",x_deposito); SALTO_DE_LINEA;
+                        TAB; printf("Sub-total: %.2f + %.2f", Usuarios[i].Deposito, x_deposito); SALTO_DE_LINEA;
+                        TAB; printf("Total: %.2f", Usuarios[i].Deposito + x_deposito); SALTO_DE_LINEA;
                         Usuarios[i].Deposito += x_deposito;
 
                         SALTO_DE_LINEA;
@@ -795,16 +807,16 @@ void fnc_menu_retirar_deposito(){
                         
                         // Retirar el deposito
                         fflush(stdin); // Liberar el teclado
-                        int iRetirar;
+                        double iRetirar;
                         TAB; printf("Cuanto desea retirar? >$"); 
-                        scanf("%i",&iRetirar);
+                        scanf("%lf",&iRetirar);
 
-                        if( ( (iRetirar % 100) == 0 ) && 
+                        if( ( ( (int) iRetirar % 100) == 0 ) && 
                             (( Usuarios[i].Deposito - iRetirar ) >= 0) ){
                             SALTO_DE_LINEA;
-                            TAB; printf("Retiro de deposito: %i",iRetirar); SALTO_DE_LINEA;
-                            TAB; printf("Sub-total: %i - %i",Usuarios[i].Deposito, iRetirar); SALTO_DE_LINEA;
-                            TAB; printf("Total: %i",Usuarios[i].Deposito - iRetirar); SALTO_DE_LINEA;
+                            TAB; printf("Retiro de deposito: %.2f",iRetirar); SALTO_DE_LINEA;
+                            TAB; printf("Sub-total: %.2f - %.2f",Usuarios[i].Deposito, iRetirar); SALTO_DE_LINEA;
+                            TAB; printf("Total: %.2f",Usuarios[i].Deposito - iRetirar); SALTO_DE_LINEA;
                             Usuarios[buscar_x_id].Deposito -= iRetirar;
                             
                             SALTO_DE_LINEA;
@@ -847,6 +859,52 @@ void fnc_menu_retirar_deposito(){
     }while( buscar_x_id != 0);
 
 
+}
+
+void crear_bd_actividades(int id_cuenta){
+    
+    // Crear el nombre del archivo
+    char nFile[50]; 
+    sprintf(nFile,"%%%%reg/.%%%%%i",Usuarios[id_cuenta].ID);
+    strcpy(Usuarios[id_cuenta].file_act, nFile);
+
+    // Crear la fecha
+    time_t cf; time(&cf);
+    char *Fecha = ctime(&cf);
+    strtok (Fecha,"\n");
+
+    // Crear el archivo
+    FILE *actividades = fopen(nFile,"w");
+    // Crear registros
+    char cRegistro[250];
+
+    // Registrar Indice por defecto
+    sprintf(cRegistro,"1# : No borrar, ni modificar\n");
+    fputs(cRegistro,actividades);
+
+    // Registrar Fechar
+    sprintf(cRegistro,"%s~ : No borrar, ni modificar\n",Fecha);
+    fputs(cRegistro, actividades);
+
+    // Registrar remitente
+    sprintf(cRegistro,"Banco: CASTIyO~ : No borrar, ni modificar\n");
+    fputs(cRegistro, actividades);
+
+    // Registrar asunto
+    sprintf(cRegistro,"Cuenta: Creado~ : No borrar, ni modificar\n");
+    fputs(cRegistro, actividades);
+
+    // Registrar descripcion
+    sprintf(cRegistro,"Deposito: %.2f~ : No borrar, ni modificar\n",
+    Usuarios[id_cuenta].Deposito);
+    fputs(cRegistro, actividades);
+
+    // Registar nombre del archivo de actividades
+    sprintf(cRegistro,"%s~####################%i\n",Usuarios[id_cuenta].file_act, Usuarios[id_cuenta].ID);
+    fputs(cRegistro, actividades);
+
+    // Cerrar el archivo
+    fclose(actividades);
 }
 
 void actualizar_base_de_datos(){
@@ -894,11 +952,11 @@ void actualizar_base_de_datos(){
         fputs(xCampos,archivo);
 
         // Guardar el deposito
-        sprintf(xCampos,"%i~ Deposito: No borrar, ni modificar\n",Usuarios[i].Deposito);
+        sprintf(xCampos,"%.2f~ Deposito: No borrar, ni modificar\n",Usuarios[i].Deposito);
         fputs(xCampos,archivo);
 
         // Guardar separador
-        sprintf(xCampos,"#######################################%i\n",Usuarios[i].ID);
+        sprintf(xCampos,"%s~####################%i\n",Usuarios[i].file_act, Usuarios[i].ID);
         fputs(xCampos,archivo);
     }
 
@@ -965,11 +1023,12 @@ void inicializar_programa(){
             // Obtener el deposito
             fgets(xCampos,250,archivo);
             strtok(xCampos,"~");
-            Usuarios[i].Deposito = atoi(xCampos);
+            Usuarios[i].Deposito = atof(xCampos);
 
-            // Obtener el separador sin ninguna accion
+            // Obtener el nombre del archivo
             fgets(xCampos,250,archivo);
-            Usuarios[i].ID = i;
+            strtok(xCampos,"~");
+            strcpy(Usuarios[i].file_act, xCampos);
         }
 
     }else{
