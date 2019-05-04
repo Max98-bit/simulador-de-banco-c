@@ -23,6 +23,7 @@ struct Registros{
     char file_act[50];
 }Usuarios[50];
 
+void inicializar_programa();
 void fnc_mostrar_datos_de_usuarios(int i);
 void opciones_menu_principal();
 void fnc_menu_crear_cuentas();
@@ -30,13 +31,13 @@ void fnc_menu_buscar_cuentas();
 void fnc_menu_modificar_cuentas();
 void fnc_menu_eliminar_cuentas();
 void fnc_menu_ver_cuentas();
+void fnc_menu_retirar_deposito();
 void fnc_transferencia_bancaria();
 void fnc_deposito_de_cuentas();
-void fnc_menu_retirar_deposito();
-void actualizar_base_de_datos();
-void inicializar_programa();
 void crear_bd_actividades(int id_cuenta);
 void _generador_de_cuenta_(int id_cuenta);
+void _registrar_actividad_(int id_cuenta,char cAsunto[200], char cDescripcion[200]);
+void actualizar_base_de_datos();
 
 // FUNCIONES 
 void fnc_mostrar_datos_de_usuarios(int i){
@@ -59,7 +60,7 @@ void fnc_mostrar_datos_de_usuarios(int i){
         SALTO_DE_LINEA;
     TAB; printf("Pais: %s",Usuarios[i].Pais);
         SALTO_DE_LINEA;
-    TAB; printf("Estado de cuenta: %.2f",Usuarios[i].Deposito);
+    TAB; printf("Estado de cuenta: $%.2lf",Usuarios[i].Deposito);
         SALTO_DE_LINEA;
     //TAB; printf("mi archivo: >> %s <<",Usuarios[i].file_act);
     //  SALTO_DE_LINEA;
@@ -205,7 +206,8 @@ void fnc_menu_crear_cuentas(){
         _generador_de_cuenta_(contadorID);
         crear_bd_actividades(contadorID);
         actualizar_base_de_datos(); SALTO_DE_LINEA;
-        printf("Num. Cuenta: %s",Usuarios[contadorID].No_cuenta); SALTO_DE_LINEA;
+        printf("No. Cuenta: %s",Usuarios[contadorID].No_cuenta); SALTO_DE_LINEA;
+        printf("PIN: %i",Usuarios[contadorID].Pin_cuenta); SALTO_DE_LINEA;
         SALTO_DE_LINEA;
         PAUSA;
     }else{
@@ -676,6 +678,18 @@ void fnc_transferencia_bancaria(){
                         TAB; printf("Total: %.2f",Usuarios[cDe].Deposito + iTrasferencia); SALTO_DE_LINEA;
                         Usuarios[cDe].Deposito += iTrasferencia;
 
+                        // Registrar actividad Remitente
+                        char xAsunto[100];
+                        sprintf(xAsunto, "Transferencia enviado: %s", Usuarios[cDe].No_cuenta);
+                        char xDescripcion[100];
+                        sprintf(xDescripcion, "Monto: (-) $%.2lf", iTrasferencia);
+                        _registrar_actividad_(Usuarios[cRe].ID,  xAsunto, xDescripcion);
+
+                        // Registrar actividad Destinatario
+                        sprintf(xAsunto,"Transferecia recibido: %s", Usuarios[cRe].No_cuenta);
+                        sprintf(xDescripcion,"Monto: (+) $%.2lf", iTrasferencia);
+                        _registrar_actividad_(Usuarios[cDe].ID, xAsunto, xDescripcion);
+
                         // Mostrar mensaje cuando la transferencia se ralizo con exito
                         SALTO_DE_LINEA;
                         SEPARADOR;
@@ -743,7 +757,7 @@ void fnc_deposito_de_cuentas(){
    SEPARADOR;
 
    fflush(stdin);
-   TAB; printf("Introduza el NO. DE CUENTE del usuario > ");
+   TAB; printf("Introduza el NO. DE CUENTA del usuario > ");
    gets(buscar_x_NoCuenta);
 
     if( strcmp(buscar_x_NoCuenta, "0") != 0 ){
@@ -774,6 +788,13 @@ void fnc_deposito_de_cuentas(){
                         TAB; printf("Sub-total: %.2f + %.2f", Usuarios[i].Deposito, x_deposito); SALTO_DE_LINEA;
                         TAB; printf("Total: %.2f", Usuarios[i].Deposito + x_deposito); SALTO_DE_LINEA;
                         Usuarios[i].Deposito += x_deposito;
+
+                        // Registrar actividad
+                        char cAsunto[100];
+                        sprintf(cAsunto, "Deposito: Solicitud aprobada");
+                        char cDescripcion[100];
+                        sprintf( cDescripcion, "Monto: (+) %.2lf", x_deposito );
+                        _registrar_actividad_(Usuarios[i].ID, cAsunto, cDescripcion);
 
                         SALTO_DE_LINEA;
                         SEPARADOR;
@@ -852,7 +873,7 @@ void fnc_menu_retirar_deposito(){
                         TAB; printf("Cuanto desea retirar? >$"); 
                         scanf("%lf",&iRetirar);
 
-                        if( ( ( (int) iRetirar % 100) == 0 ) && 
+                        if( iRetirar != 0 && ( ((int)iRetirar % 100) == 0 ) && 
                             (( Usuarios[i].Deposito - iRetirar ) >= 0) ){
                             SALTO_DE_LINEA;
                             TAB; printf("Retiro de deposito: %.2f",iRetirar); SALTO_DE_LINEA;
@@ -860,6 +881,13 @@ void fnc_menu_retirar_deposito(){
                             TAB; printf("Total: %.2f",Usuarios[i].Deposito - iRetirar); SALTO_DE_LINEA;
                             Usuarios[i].Deposito -= iRetirar;
                             
+                            // Registrar actividad
+                            char cAsunto[100];
+                            sprintf(cAsunto, "Retiro deposito: Solicitud aprobada");
+                            char cDescripcion[100];
+                            sprintf(cDescripcion,"Monto: (-) $%.2lf", iRetirar);
+                            _registrar_actividad_(Usuarios[i].ID, cAsunto, cDescripcion);
+
                             SALTO_DE_LINEA;
                             SEPARADOR;
                             printf("La solicitud se realizo exitosamente!"); SALTO_DE_LINEA;
@@ -976,6 +1004,69 @@ void crear_bd_actividades(int id_cuenta){
 
     // Cerrar el archivo
     fclose(actividades);
+}
+
+void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[100]){
+    char xCampos[250]; 
+    char *mod;
+    int iBuffer, iFilas, iActividades , i;
+
+    // Obtener la fecha
+    char cFecha[50];
+    time_t f; time(&f);
+    sprintf(cFecha,"%s",ctime(&f));
+    strtok(cFecha,"\n");
+
+    if( Usuarios[id_cuenta].Deposito > 0)
+        mod = "r+";
+    else
+        mod = "w+";
+
+    FILE *bd_actividades = fopen(Usuarios[id_cuenta].file_act, mod);
+
+    // Obtener la cantidad de actividades registrados
+    fgets(xCampos,250,bd_actividades); strtok(xCampos,"#");
+    iActividades = atoi(xCampos);
+    iFilas = iActividades * 5;
+    
+    // Obtener el final del archivo o buffer
+    for(i=1; i <= iFilas; i++){
+        fgets(xCampos,250,bd_actividades);
+        iBuffer = ftell(bd_actividades);
+    }
+    
+    // Posicionar la final del buffer del archivo
+    // y aumentar la cantidad de actividades 
+    fseek(bd_actividades, iBuffer, SEEK_SET);
+    iActividades++;
+
+    // Registrar Fecha
+    sprintf(xCampos, "%s~ : No borrar, ni modificar\n", cFecha);
+    fputs(xCampos,bd_actividades);
+
+    // Registrar Remitente
+    sprintf(xCampos,"Banco: CASTIyO~ : No borrar, ni modificar\n");
+    fputs(xCampos,bd_actividades);
+
+    // Registrar Asunto
+    sprintf(xCampos,"%s~ : No borrar, ni modificar\n", cAsunto);
+    fputs(xCampos, bd_actividades);
+
+    // Registrar Descripcion
+    sprintf(xCampos,"%s~ : No borrar, ni modificar\n", cDescripcion);
+    fputs(xCampos, bd_actividades);
+
+    // Registrar Separador
+    sprintf(xCampos,"%s~##############################%i\n",
+    Usuarios[id_cuenta].file_act, iActividades);
+    fputs(xCampos, bd_actividades);
+
+    // Registar el nuevo cantidad de actividades
+    rewind(bd_actividades);
+    sprintf(xCampos,"%i# : No borrar, ni modificar", iActividades);
+    fputs(xCampos,bd_actividades);
+
+    fclose(bd_actividades);
 }
 
 void actualizar_base_de_datos(){

@@ -8,7 +8,6 @@
 #include <time.h>
 #include "banco.h"
 
-
 int main(){
     
     do{
