@@ -1,10 +1,21 @@
-1#Warning: No borrar, ni modificar
-1~ ID: No borrar, ni modificar
-cccccccc~ Nombre: No borrar, ni modificar
-ccccccccccccccccc~ Apellido paterno: No borrar, ni modificar
-cccccccccccccccc~ Apellido materno: No borrar, ni modificar
-00/00/0000~ Fecha de nacimiento: No borrar, ni modificar
-ccccccccccc~ Domicilio: No borrar, ni modificar
-ccccccccccccc~ Pais: No borrar, ni modificar
-1000.00~ Deposito: No borrar, ni modificar
-%%reg/.%%1~####################1
+2#Warning: No borrar, ni modificar
+0521-4-0000-4~ No. Cuenta: No borrar, ni modificar
+684437~ PIN: No borrar, ni modificar
+x~ Nombre: No borrar, ni modificar
+x~ Apellido paterno: No borrar, ni modificar
+x~ Apellido materno: No borrar, ni modificar
+00/00/1234~ Fecha de nacimiento: No borrar, ni modificar
+x~ Domicilio: No borrar, ni modificar
+x~ Pais: No borrar, ni modificar
+700.00~ Deposito: No borrar, ni modificar
+%%reg/.%%0521-4-0000-4~##############################1
+0521-2-1221-2~ No. Cuenta: No borrar, ni modificar
+864815~ PIN: No borrar, ni modificar
+x~ Nombre: No borrar, ni modificar
+x~ Apellido paterno: No borrar, ni modificar
+x~ Apellido materno: No borrar, ni modificar
+12/21/2323~ Fecha de nacimiento: No borrar, ni modificar
+x~ Domicilio: No borrar, ni modificar
+x~ Pais: No borrar, ni modificar
+100.00~ Deposito: No borrar, ni modificar
+%%reg/.%%0521-2-1221-2~##############################2
