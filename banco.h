@@ -1008,7 +1008,6 @@ void crear_bd_actividades(int id_cuenta){
 
 void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[100]){
     char xCampos[250]; 
-    char *mod;
     int iBuffer, iFilas, iActividades , i;
 
     // Obtener la fecha
@@ -1017,18 +1016,19 @@ void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[1
     sprintf(cFecha,"%s",ctime(&f));
     strtok(cFecha,"\n");
 
-    if( Usuarios[id_cuenta].Deposito > 0)
-        mod = "r+";
-    else
-        mod = "w+";
-
-    FILE *bd_actividades = fopen(Usuarios[id_cuenta].file_act, mod);
+    FILE *bd_actividades = fopen(Usuarios[id_cuenta].file_act, "r+");
 
     // Obtener la cantidad de actividades registrados
     fgets(xCampos,250,bd_actividades); strtok(xCampos,"#");
-    iActividades = atoi(xCampos);
-    iFilas = iActividades * 5;
     
+    if( Usuarios[id_cuenta].Deposito > 0){
+        iActividades = atoi(xCampos);    
+        iFilas = iActividades * 5;
+    }else{
+        iActividades = 1; 
+        iFilas = iActividades * 5;
+    }
+
     // Obtener el final del archivo o buffer
     for(i=1; i <= iFilas; i++){
         fgets(xCampos,250,bd_actividades);
@@ -1057,10 +1057,8 @@ void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[1
     fputs(xCampos, bd_actividades);
 
     // Registrar Separador
-    sprintf(xCampos,"%s~##############################%i\n",
-    Usuarios[id_cuenta].file_act, iActividades);
-    fputs(xCampos, bd_actividades);
-
+    fputs("###############################################################\n", bd_actividades);
+    
     // Registar el nuevo cantidad de actividades
     rewind(bd_actividades);
     sprintf(xCampos,"%i# : No borrar, ni modificar", iActividades);
@@ -1086,14 +1084,6 @@ void actualizar_base_de_datos(){
     for(i=1; i <= contadorID; i++){
         Usuarios[i].ID = i; // Dar un indice
         
-        // Guardar el numero de la cuenta
-        sprintf(xCampos,"%s~ No. Cuenta: No borrar, ni modificar\n",Usuarios[i].No_cuenta);
-        fputs(xCampos,archivo);
-
-        // Guardar el pin de la cuenta
-        sprintf(xCampos,"%i~ PIN: No borrar, ni modificar\n",Usuarios[i].Pin_cuenta);
-        fputs(xCampos,archivo);
-
         // Guardar el nombre
         sprintf(xCampos,"%s~ Nombre: No borrar, ni modificar\n",Usuarios[i].Nombre);
         fputs(xCampos,archivo);
@@ -1116,6 +1106,14 @@ void actualizar_base_de_datos(){
 
         // Guardar el pais
         sprintf(xCampos,"%s~ Pais: No borrar, ni modificar\n",Usuarios[i].Pais);
+        fputs(xCampos,archivo);
+
+        // Guardar el numero de la cuenta
+        sprintf(xCampos,"%s~ No. Cuenta: No borrar, ni modificar\n",Usuarios[i].No_cuenta);
+        fputs(xCampos,archivo);
+
+        // Guardar el pin de la cuenta
+        sprintf(xCampos,"%i~ PIN: No borrar, ni modificar\n",Usuarios[i].Pin_cuenta);
         fputs(xCampos,archivo);
 
         // Guardar el deposito
@@ -1153,16 +1151,6 @@ void inicializar_programa(){
         for(i=1; i <= contadorID; i++){
             Usuarios[i].ID = i; // Dar un indice
 
-            // Obtener el numero de la cuenta
-            fgets(xCampos,250,archivo);
-            strtok(xCampos,"~");
-            strcpy(Usuarios[i].No_cuenta,xCampos);
-
-            // Obtener el pin de la cuenta
-            fgets(xCampos,250,archivo);
-            strtok(xCampos,"~");
-            Usuarios[i].Pin_cuenta = atoi(xCampos);
-
             // Obtener el nombre
             fgets(xCampos,250,archivo);
             strtok(xCampos,"~");
@@ -1193,6 +1181,16 @@ void inicializar_programa(){
             strtok(xCampos,"~");
             strcpy(Usuarios[i].Pais, xCampos);
 
+            // Obtener el numero de la cuenta
+            fgets(xCampos,250,archivo);
+            strtok(xCampos,"~");
+            strcpy(Usuarios[i].No_cuenta,xCampos);
+
+            // Obtener el pin de la cuenta
+            fgets(xCampos,250,archivo);
+            strtok(xCampos,"~");
+            Usuarios[i].Pin_cuenta = atoi(xCampos);            
+            
             // Obtener el deposito
             fgets(xCampos,250,archivo);
             strtok(xCampos,"~");
