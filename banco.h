@@ -87,6 +87,7 @@ void opciones_menu_principal(){
 }
 
 void fnc_menu_crear_cuentas(){
+    inicializar_programa();
     contadorID++;
     char c_campos[50];
     int i, campos_correcto = 0;
@@ -226,6 +227,7 @@ void fnc_menu_buscar_cuentas(){
     int opc_menu, i, Encontrado;
 
     do{
+        inicializar_programa();
         BORRAR_LA_PANTALLA;
         Encontrado = 0;
         TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
@@ -323,6 +325,7 @@ void fnc_menu_buscar_cuentas(){
 }
 
 void fnc_menu_modificar_cuentas(){
+    inicializar_programa();
     int i;
     int Encontrado; 
     char xModificar[50]; 
@@ -437,10 +440,26 @@ void fnc_menu_modificar_cuentas(){
                         gets(xModificar);
                         if( strlen(xModificar) > 0 && 
                             atoi(xModificar) == 0 &&
-                            strcmp(xModificar,"0") != 0)
+                            strcmp(xModificar,"0") != 0)    
                             strcpy(Usuarios[i].Pais,xModificar);
                         else{
                             TAB; printf("**Pais no modificado!");
+                            SALTO_DE_LINEA;
+                        }
+
+                        // Modificar el PIN
+                        int xPIN;
+                        SALTO_DE_LINEA;
+                        fflush(stdin);
+                        TAB; printf("PIN: %i", Usuarios[i].Pin_cuenta); SALTO_DE_LINEA;
+                        TAB; printf("Nuevo PIN / Intro para no modificar: ");
+                        scanf("%i",&xPIN);
+                        sprintf(xModificar,"%i", xPIN);
+
+                        if( strlen(xModificar) == 6 ){
+                            Usuarios[i].Pin_cuenta = xPIN;
+                        }else{
+                            TAB; printf("**PIN no modificado!");
                             SALTO_DE_LINEA;
                         }
                         
@@ -473,6 +492,7 @@ void fnc_menu_eliminar_cuentas(){
     int i, Encontrado;
 
     do{
+        inicializar_programa();
         BORRAR_LA_PANTALLA;
         TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
         TAB; printf("Eliminar cuentas"); SALTO_DE_LINEA;
@@ -572,7 +592,8 @@ void fnc_menu_eliminar_cuentas(){
 }
 
 void fnc_menu_ver_cuentas(){
-    
+
+    inicializar_programa();
     TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
     TAB; printf("Ver cuentas"); SALTO_DE_LINEA;
     SEPARADOR;
@@ -590,6 +611,7 @@ void fnc_transferencia_bancaria(){
     char c_CuentaRemitente[50], c_CuentaDestinatario[50];
     int i, cRe = 0, cDe = 0;
 
+    inicializar_programa();
     TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
     TAB; printf("Transferencia bancaria"); SALTO_DE_LINEA;
     SEPARADOR;
@@ -748,6 +770,7 @@ void fnc_deposito_de_cuentas(){
    char buscar_x_NoCuenta[50];
    int i, Encontrado = 0;
 
+    inicializar_programa();
    TAB; printf("BANKO CASTIyO \\(*__*)/");  SALTO_DE_LINEA;
    TAB; printf("Deposito de cuentas");  SALTO_DE_LINEA;
    SEPARADOR;
@@ -837,7 +860,8 @@ void fnc_menu_retirar_deposito(){
     char buscar_x_NoCuenta[50];
     int i, Encontrado;
 
-    do{    
+    do{ 
+        inicializar_programa();   
         BORRAR_LA_PANTALLA;
         Encontrado = 0;
         TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
