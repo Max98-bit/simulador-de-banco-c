@@ -1,4 +1,4 @@
-1#Warning: No borrar, ni modificar
+2#Warning: No borrar, ni modificar
 Esteban~ Nombre: No borrar, ni modificar
 Domingo~ Apellido paterno: No borrar, ni modificar
 Abundio~ Apellido materno: No borrar, ni modificar
@@ -7,5 +7,15 @@ Av. Mexico~ Domicilio: No borrar, ni modificar
 Mexico~ Pais: No borrar, ni modificar
 0521-1-2101-1~ No. Cuenta: No borrar, ni modificar
 111111~ PIN: No borrar, ni modificar
-0.00~ Deposito: No borrar, ni modificar
+880.00~ Deposito: No borrar, ni modificar
 %%reg/.%%0521-1-2101-1~##############################1
+xxx~ Nombre: No borrar, ni modificar
+xx~ Apellido paterno: No borrar, ni modificar
+xx~ Apellido materno: No borrar, ni modificar
+00/00/0000~ Fecha de nacimiento: No borrar, ni modificar
+x~ Domicilio: No borrar, ni modificar
+x~ Pais: No borrar, ni modificar
+1~ No. Cuenta: No borrar, ni modificar
+1~ PIN: No borrar, ni modificar
+31.00~ Deposito: No borrar, ni modificar*
+%%reg/.%%0521-2-0000-2~##############################2

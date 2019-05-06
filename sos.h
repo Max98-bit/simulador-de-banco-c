@@ -220,7 +220,7 @@ void fnc_registrar_actividad(){
     strtok(xCampos, "#"); // Recortar
     cantidad_de_actividades = atoi(xCampos);  // Convertir char a int
     
-    end = cantidad_de_actividades * 5;
+    end = cantidad_de_actividades * 6;
     for( i = 1; i <= end; i++ ){
         fgets(xCampos,250,registros);
         fp = ftell(registros);
@@ -231,6 +231,9 @@ void fnc_registrar_actividad(){
     // Introducir el fin de linea del archivo
     fseek ( registros , fp , SEEK_SET );
     
+    // Registrar el tipo de actividad
+    fputs("101~ : No borrar, ni modificar\n", registros);
+
     // Registrar Fecha
     sprintf(xCampos,"%s~ : No borrar, ni modificar\n", Productos.Fecha);
     fputs(xCampos, registros);
@@ -253,7 +256,7 @@ void fnc_registrar_actividad(){
     // Regresar al inicio de linea del archivo
     rewind(registros);
     // Registrar la cantidad de registros
-    sprintf(xCampos,"%i# Registros: No borrar, ni modificar\n",cantidad_de_actividades);
+    sprintf(xCampos,"%i#",cantidad_de_actividades);
     fputs(xCampos,registros);
 
     fclose(registros);

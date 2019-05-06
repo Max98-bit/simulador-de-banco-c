@@ -36,8 +36,16 @@ void fnc_transferencia_bancaria();
 void fnc_deposito_de_cuentas();
 void crear_bd_actividades(int id_cuenta);
 void _generador_de_cuenta_(int id_cuenta);
-void _registrar_actividad_(int id_cuenta,char cAsunto[200], char cDescripcion[200]);
+void _registrar_actividad_(int id_cuenta,char cAsunto[200], char cDescripcion[200], int tipoDeOperacion);
 void actualizar_base_de_datos();
+
+// TIPOS DE ACTIVIDADES
+// 100 - Cuenta creado
+// 101 - Compra
+// 200 - Deposito
+// 301 - Transferencia enviado
+// 302 - Transferencia recibido
+// 400 - Retiro de deposito
 
 // FUNCIONES 
 void fnc_mostrar_datos_de_usuarios(int i){
@@ -705,12 +713,12 @@ void fnc_transferencia_bancaria(){
                         sprintf(xAsunto, "Transferencia enviado: %s", Usuarios[cDe].No_cuenta);
                         char xDescripcion[100];
                         sprintf(xDescripcion, "Monto: (-) $%.2lf", iTrasferencia);
-                        _registrar_actividad_(Usuarios[cRe].ID,  xAsunto, xDescripcion);
+                        _registrar_actividad_(Usuarios[cRe].ID,  xAsunto, xDescripcion, 301);
 
                         // Registrar actividad Destinatario
                         sprintf(xAsunto,"Transferecia recibido: %s", Usuarios[cRe].No_cuenta);
                         sprintf(xDescripcion,"Monto: (+) $%.2lf", iTrasferencia);
-                        _registrar_actividad_(Usuarios[cDe].ID, xAsunto, xDescripcion);
+                        _registrar_actividad_(Usuarios[cDe].ID, xAsunto, xDescripcion, 302);
 
                         // Mostrar mensaje cuando la transferencia se ralizo con exito
                         SALTO_DE_LINEA;
@@ -817,7 +825,7 @@ void fnc_deposito_de_cuentas(){
                         sprintf(cAsunto, "Deposito: Solicitud aprobada");
                         char cDescripcion[100];
                         sprintf( cDescripcion, "Monto: (+) %.2lf", x_deposito );
-                        _registrar_actividad_(Usuarios[i].ID, cAsunto, cDescripcion);
+                        _registrar_actividad_(Usuarios[i].ID, cAsunto, cDescripcion, 200);
 
                         SALTO_DE_LINEA;
                         SEPARADOR;
@@ -910,7 +918,7 @@ void fnc_menu_retirar_deposito(){
                             sprintf(cAsunto, "Retiro deposito: Solicitud aprobada");
                             char cDescripcion[100];
                             sprintf(cDescripcion,"Monto: (-) $%.2lf", iRetirar);
-                            _registrar_actividad_(Usuarios[i].ID, cAsunto, cDescripcion);
+                            _registrar_actividad_(Usuarios[i].ID, cAsunto, cDescripcion, 400);
 
                             SALTO_DE_LINEA;
                             SEPARADOR;
@@ -1005,6 +1013,9 @@ void crear_bd_actividades(int id_cuenta){
     sprintf(cRegistro,"1# : No borrar, ni modificar\n");
     fputs(cRegistro,actividades);
 
+    // Registrar el tipo de actividad
+    fputs("100~ : No borrar, ni modificar\n",actividades);
+
     // Registrar Fechar
     sprintf(cRegistro,"%s~ : No borrar, ni modificar\n",Fecha);
     fputs(cRegistro, actividades);
@@ -1023,14 +1034,14 @@ void crear_bd_actividades(int id_cuenta){
     fputs(cRegistro, actividades);
 
     // Registar nombre del archivo de actividades
-    sprintf(cRegistro,"%s~##############################%i\n",Usuarios[id_cuenta].file_act, Usuarios[id_cuenta].ID);
+    sprintf(cRegistro,"%i~##########################################################\n", Usuarios[id_cuenta].ID);
     fputs(cRegistro, actividades);
 
     // Cerrar el archivo
     fclose(actividades);
 }
 
-void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[100]){
+void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[100], int tipoDeOperacion){
     char xCampos[250]; 
     int iBuffer, iFilas, iActividades , i;
 
@@ -1047,10 +1058,10 @@ void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[1
     
     if( Usuarios[id_cuenta].Deposito > 0){
         iActividades = atoi(xCampos);    
-        iFilas = iActividades * 5;
+        iFilas = iActividades * 6;
     }else{
         iActividades = 1; 
-        iFilas = iActividades * 5;
+        iFilas = iActividades * 6;
     }
 
     // Obtener el final del archivo o buffer
@@ -1063,6 +1074,10 @@ void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[1
     // y aumentar la cantidad de actividades 
     fseek(bd_actividades, iBuffer, SEEK_SET);
     iActividades++;
+
+    // Registrar el tipo de operacion
+    sprintf(xCampos,"%i~ : No borrar, ni modificar\n", tipoDeOperacion);
+    fputs(xCampos, bd_actividades);
 
     // Registrar Fecha
     sprintf(xCampos, "%s~ : No borrar, ni modificar\n", cFecha);
@@ -1081,7 +1096,7 @@ void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[1
     fputs(xCampos, bd_actividades);
 
     // Registrar Separador
-    fputs("###############################################################\n", bd_actividades);
+    fputs("############################################################\n", bd_actividades);
     
     // Registar el nuevo cantidad de actividades
     rewind(bd_actividades);
