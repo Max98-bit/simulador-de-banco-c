@@ -13,7 +13,7 @@ int main(){
         SEPARADOR;
 
         // Seleccionar una opcion
-        SALTO_DE_LINEA
+        SALTO_DE_LINEA;
         fflush(stdin); // Liberar el teclado
         TAB; printf("Seleccione una opcion > ");
         scanf("%c",&opc_menuPrincipal);
@@ -21,19 +21,17 @@ int main(){
         switch (opc_menuPrincipal)
         {
             case '1':{
-                if( inicio_de_session == 0 ){
-                    fnc_menu_iniciar_session();
-                }else{
+                
+                if( DatosCuenta._SESSION_ == 1 ){
                     BORRAR_LA_PANTALLA;
                     SEPARADOR;
                     printf("Cerrando sesion."); SALTO_DE_LINEA;
-                    printf("Hasta luego:  %s %s %s",Datos.N_tmp, Datos.Ap_tmp, Datos.Am_tmp); SALTO_DE_LINEA;
                     SALTO_DE_LINEA;
+                    DatosCuenta._SESSION_ = 0;
                     PAUSA;
-                    inicio_de_session = 0;
-                }
-            }break;
+                }else fnc_menu_iniciar_session();
 
+            }break;
         }
 
     }while ( opc_menuPrincipal != '0');

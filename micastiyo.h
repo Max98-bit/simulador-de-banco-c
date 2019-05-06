@@ -7,177 +7,234 @@
 #define PAUSA system("pause");
 
 char opc_menuPrincipal;
-int inicio_de_session = 0;
 
-struct Usuarios{
+struct Cuenta_Castiyo{
     int ID;
-    char N_tmp[50];
-    char Ap_tmp[50];
-    char Am_tmp[50];
-    char Fn_tmp[11];
-    char D_tmp[250];
-    char P_tmp[50];
-    int Dep_tmp;
+    char nombre_tmp[50];
+    char apelldioPaterno_tmp[50];
+    char apellidoMaterno_tmp[50];
+    char fechaDNacimiento_tmp[11];
+    char domicilio_tmp[250];
+    char pais_tmp[50];
+    char noDCuenta_tmp[50];
+    int pinDCuenta_tmp;
+    double estadoDCuenta_tmp;
+    char bdActividades_temp[100];
+    int _SESSION_;
+    int posicionDDatos;
 };
 
 // Crear un usuario
-struct Usuarios Datos;
-
+struct Cuenta_Castiyo DatosCuenta;
 
 void opciones_menu_principal();
 void fnc_menu_iniciar_session();
+void _verificar_cuenta_();
+void _obtener_datos_de_la_cuenta_();
 
 // FUNCIONES
 void opciones_menu_principal(){
     
-    // Titulo
-    TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
-    SEPARADOR;
-    
-    // Mostrar opciones distintos
-    if( inicio_de_session != 0 ){
-        DOBLE_TAB; printf("1 > Cerrar Session"); SALTO_DE_LINEA;
-    }else{
-        DOBLE_TAB; printf("1 > Iniciar Session"); SALTO_DE_LINEA;
-    }
-
-    // Deshabilitar opcines miestras usuarios sean 0
-    if( inicio_de_session != 0 ){
+    if( DatosCuenta._SESSION_ == 1){
+        TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
+        printf("Bienvenido: %s %s %s",
+        DatosCuenta.nombre_tmp,
+        DatosCuenta.apelldioPaterno_tmp,
+        DatosCuenta.apellidoMaterno_tmp); SALTO_DE_LINEA;
+        SEPARADOR;
+        DOBLE_TAB; printf("1 > Cerrar session"); SALTO_DE_LINEA;
         DOBLE_TAB; printf("2 > Transferencia"); SALTO_DE_LINEA;
         DOBLE_TAB; printf("3 > Deposito"); SALTO_DE_LINEA;
         DOBLE_TAB; printf("4 > Retiro de deposito"); SALTO_DE_LINEA;
+        DOBLE_TAB; printf("0 > Salir del programa"); SALTO_DE_LINEA;
+    }else{
+        TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
+        SEPARADOR;
+        DOBLE_TAB; printf("1 > Iniciar session"); SALTO_DE_LINEA;
+        DOBLE_TAB; printf("0 > Salir del programa"); SALTO_DE_LINEA;
     }
-
-    // Opcion para salir
-    DOBLE_TAB; printf("0 > Salir del programa"); SALTO_DE_LINEA;
 
 }
 
 void fnc_menu_iniciar_session(){
-    int buscar_x_id;
 
     do{
-        BORRAR_LA_PANTALLA;
-        TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
-        TAB; printf("Iniciar session"); SALTO_DE_LINEA;
-        SEPARADOR;
-        DOBLE_TAB; printf("0 > Volver al menu principal"); SALTO_DE_LINEA;
-        SEPARADOR;
-
-        if( inicio_de_session == 0 ){
-        // Seleccionar una opcion
-        SALTO_DE_LINEA;
-        fflush(stdin); // Liberar el teclado
-        TAB; printf("Introduzca el ID de la cuenta > ");
-        scanf("%i",&buscar_x_id);
-        }else{ buscar_x_id = 0; }
         
-        if( buscar_x_id > 0 ){
+        BORRAR_LA_PANTALLA;
+        
+        if( DatosCuenta._SESSION_ == 0){
+            TAB; printf("BANKO CASTIyO \\(*__*)/"); SALTO_DE_LINEA;
+            TAB; printf("Iniciar session"); SALTO_DE_LINEA;
+            SEPARADOR;
+            DOBLE_TAB; printf("0 > Salir del programa"); SALTO_DE_LINEA;
+            SEPARADOR;
+
+            // Capturar el no. de cuenta
             SALTO_DE_LINEA;
-            printf("Iniciando Session");
-            FILE *archivo = fopen(".%%CASTIyO%%","r");
-            
-            if( archivo == NULL){
-                perror("Lo siento, no existe el archvio");
-                exit(1);
-            }
+            fflush(stdin);
+            TAB; printf("Introduzca tu NO. DE CUENTA: ");
+            gets(DatosCuenta.noDCuenta_tmp);
+        }else{
+            strcpy(DatosCuenta.noDCuenta_tmp, "0");
+        }
+        
+        if( strcmp( DatosCuenta.noDCuenta_tmp, "0" ) != 0 ){
 
-            char xCampos[250];
-            int cantidad_cuentas;
+            // Utentticacion
+            int xPIN;
+            fflush(stdin);
+            TAB; printf("Introduzca tu PIN de la cuenta: ");
+            scanf("%i", &xPIN);
 
-            // Leer la primera linea
-            fgets(xCampos,250,archivo);
-            strtok(xCampos,"#");
-            cantidad_cuentas = atoi(xCampos);
+            // Verificar la cuenta
+            _verificar_cuenta_();
 
-            if( cantidad_cuentas > 0){
-
-                int i;
-                // Buscando cuenta
-                for( i = 1; i <= cantidad_cuentas; i++ ){
-                    
-                    // Obtener id de cuentas
-                    // en la base de datos
-                    fgets(xCampos,250,archivo);
-                    strtok(xCampos,"~");
-                    
-                    // Iniciar session si existe la cuenta
-                    if( atoi(xCampos) == buscar_x_id ){
-                        inicio_de_session = atoi(xCampos);
-                        
-                        // Obtener el nombre
-                        fgets(xCampos,250,archivo);
-                        strtok(xCampos,"~");
-                        strcpy(Datos.N_tmp,xCampos);
-
-                        // Obtener apellido paterno
-                        fgets(xCampos,250,archivo);
-                        strtok(xCampos,"~");
-                        strcpy(Datos.Ap_tmp,xCampos);
-
-                        // Obtener apellido materno
-                        fgets(xCampos,250,archivo);
-                        strtok(xCampos,"~");
-                        strcpy(Datos.Am_tmp,xCampos);
-
-                        // Obtener fecha de nacimiento
-                        fgets(xCampos,250,archivo);
-                        strtok(xCampos,"~");
-                        strcpy(Datos.Fn_tmp,xCampos);
-
-                        // Obtener domicilio
-                        fgets(xCampos,250,archivo);
-                        strtok(xCampos,"~");
-                        strcpy(Datos.D_tmp,xCampos);
-
-                        // Obtener Pais
-                        fgets(xCampos,250,archivo);
-                        strtok(xCampos,"~");
-                        strcpy(Datos.P_tmp,xCampos);
-
-                        // Obtener deposito
-                        fgets(xCampos,250,archivo);
-                        strtok(xCampos,"~");
-                        Datos.Dep_tmp = atoi(xCampos);
-
-                        // Obtener el separador
-                        fgets(xCampos,250,archivo);
-                        break;
-                    }else{
-                        fgets(xCampos,250,archivo);
-                        fgets(xCampos,250,archivo);
-                        fgets(xCampos,250,archivo);
-                        fgets(xCampos,250,archivo);
-                        fgets(xCampos,250,archivo);
-                        fgets(xCampos,250,archivo);
-                        fgets(xCampos,250,archivo);
-                        fgets(xCampos,250,archivo);
-                    }
-                }
-
-                if( inicio_de_session != 0){
-                    SALTO_DE_LINEA;
-                    SEPARADOR;
-                    printf("Inicio de session exitosa."); SALTO_DE_LINEA;
-                    printf("Bienvenido %s %s %s", Datos.N_tmp, Datos.Ap_tmp, Datos.Am_tmp); SALTO_DE_LINEA;
-                    SALTO_DE_LINEA;
-                    PAUSA;
-                }else{
-                    SALTO_DE_LINEA;
-                    SEPARADOR;
-                    printf("Lo siento, fallo al iniciar session."); SALTO_DE_LINEA;
-                    printf("Vuelva intentarlo mas tarde o"); SALTO_DE_LINEA;
-                    printf("Verifique que la cuenta este registrado."); SALTO_DE_LINEA;
-                    SALTO_DE_LINEA;
-                    PAUSA;
-                }
+            if( DatosCuenta._SESSION_ == 0){
+                SALTO_DE_LINEA;
+                SEPARADOR;
+                printf("Fallo al inciar session!");SALTO_DE_LINEA;
+                printf("El no. de cuenta no esta registrado");SALTO_DE_LINEA;
+                printf("o verifique que tenga el siguiente formato: ");SALTO_DE_LINEA;
+                printf("0521-X-XXXX-X");SALTO_DE_LINEA;
+                SALTO_DE_LINEA;
+                PAUSA;
+            }else if( DatosCuenta.pinDCuenta_tmp != xPIN){
+                DatosCuenta._SESSION_ = 0;
+                SALTO_DE_LINEA;
+                SEPARADOR;
+                printf("Fallo al inciar session!"); SALTO_DE_LINEA;
+                printf("El PIN introducido es incorrecto."); SALTO_DE_LINEA;
+                SALTO_DE_LINEA;
+                PAUSA;                 
             }else{
-                printf("Lo siento, la base de datos no tiene registro.");
+                _obtener_datos_de_la_cuenta_();
+                SALTO_DE_LINEA;
+                SEPARADOR;
+                printf("Inicio session correctamente!"); SALTO_DE_LINEA;
+                SALTO_DE_LINEA;
+                PAUSA; 
             }
-
-            fclose(archivo);
+            
         }
 
+    }while( strcmp( DatosCuenta.noDCuenta_tmp, "0" ) != 0 );
 
-    }while( buscar_x_id != 0);
+}
+
+void _verificar_cuenta_(){
+    char xCampos[250];
+    int cantidad_usuarios, iFilas;
+
+    FILE *bd_castiyo = fopen(".%%CASTIyO%%", "r");
+
+    if( bd_castiyo == NULL){
+        perror("Lo siento no tienen conexion con el banco");
+        SALTO_DE_LINEA;
+    }
+
+    // Obtener la cantidad de usuarios registrados
+    fgets(xCampos,250, bd_castiyo);
+    strtok(xCampos,"#");
+    cantidad_usuarios = atoi(xCampos);
+    iFilas = cantidad_usuarios * 10;
+
+    // Leer todas las lineas para confimar
+    // que la cuenta existe
+    int i;
+    for(i=1; i <= iFilas; i++ ){
+        
+        fgets(xCampos, 250, bd_castiyo);
+        strtok(xCampos, "~");
+        
+        if( strcmp(DatosCuenta.noDCuenta_tmp, xCampos) == 0){
+
+            // Obtener PIN de la cuenta
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            DatosCuenta.pinDCuenta_tmp = atoi(xCampos);
+            DatosCuenta._SESSION_ = 1;
+            DatosCuenta.posicionDDatos = (i - 7) + 2;
+            //printf("%i - %i\n", DatosCuenta.posicionDDatos, DatosCuenta.posicionDDatos + 9 );
+
+            break;
+        }
+
+    }
+
+    fclose(bd_castiyo);
+}
+
+void _obtener_datos_de_la_cuenta_(){
+    FILE *bd_castiyo = fopen(".%%CASTIyO%%", "r");
+
+    if( bd_castiyo == NULL){
+        perror("Lo siento no existe el archivo");
+        PAUSA;
+    }
+
+    char xCampos[250];
+    int iFilas, cantidad_usuarios;
+    fgets(xCampos, 250, bd_castiyo);
+    strtok(xCampos,"#");
+    cantidad_usuarios = atoi(xCampos);
+    iFilas = cantidad_usuarios * 10;
+
+    int i;
+    for(i = 1; i <= iFilas; i++ ){
+        if( i == DatosCuenta.posicionDDatos ){
+            
+            // Obtener el nombre
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.nombre_tmp,xCampos);
+
+            // Obtener el apellido paterno
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.apelldioPaterno_tmp,xCampos);
+
+            // Obtener el apellido materno
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.apellidoMaterno_tmp, xCampos);
+
+            // Obtener la fecha
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.fechaDNacimiento_tmp, xCampos);
+
+            // Obtener el domicilio
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.domicilio_tmp,xCampos);
+
+            // Obtener el pais
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.pais_tmp, xCampos);
+
+            // Obtener el no. de cuenta
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.noDCuenta_tmp, xCampos);
+
+            // Obtener el PIN
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            DatosCuenta.pinDCuenta_tmp = atoi(xCampos);
+
+            // Obtener el estado de cuenta
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            DatosCuenta.estadoDCuenta_tmp = atof(xCampos);
+
+            // Obtener la base de datos de actividades
+            fgets(xCampos, 250, bd_castiyo);
+            strtok(xCampos, "~");
+            strcpy(DatosCuenta.bdActividades_temp ,xCampos);
+
+        }
+    }
+
+    fclose(bd_castiyo);
 }
