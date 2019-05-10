@@ -658,7 +658,8 @@ void fnc_transferencia_bancaria(){
             TAB; printf("Introduzca la cantidad de la transferencia > ");
             scanf("%lf",&iTrasferencia);
 
-            if( (iTrasferencia != 0) && (( (int) iTrasferencia % 100) == 0) &&
+            if( (iTrasferencia != 0) && 
+                (( (int) iTrasferencia % 100) == 0) &&
                 ( iTrasferencia <= Usuarios[cRe].Deposito  &&
                 Usuarios[cRe].Deposito != 0) ){
                 
@@ -679,11 +680,9 @@ void fnc_transferencia_bancaria(){
                     if( cDe >= 1){
                         BORRAR_LA_PANTALLA;
                         
-                        // Remitente
+                        // Mostrar estado de cuenta del remitente
                         SEPARADOR;
                         TAB; printf("Estado de cuenta del remitente"); SALTO_DE_LINEA;
-
-                        // Mostrar estado de cuenta del remitente
                         fnc_mostrar_datos_de_usuarios(cRe);  
                         
                         // Mostrar datos de la tranferencia
@@ -694,11 +693,9 @@ void fnc_transferencia_bancaria(){
                         Usuarios[cRe].Deposito -= iTrasferencia;    
                         SALTO_DE_LINEA;
 
-                        // destinarario
+                        // Mostrar estado de cuenta del destinatario
                         SEPARADOR;
                         TAB; printf("Estado de cuenta del destinatario"); SALTO_DE_LINEA;
-
-                        // Mostrar estado de cuenta del destinatario
                         fnc_mostrar_datos_de_usuarios(cDe); 
                         
                         // Mostrar datos de la tranferencia
