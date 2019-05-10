@@ -1093,7 +1093,7 @@ void _registrar_actividad_(int id_cuenta, char cAsunto[100], char cDescripcion[1
     fputs(xCampos, bd_actividades);
 
     // Registrar Separador
-    fputs("############################################################\n", bd_actividades);
+    fputs("###############################################################\n", bd_actividades);
     
     // Registar el nuevo cantidad de actividades
     rewind(bd_actividades);

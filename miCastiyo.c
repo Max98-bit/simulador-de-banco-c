@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <string.h> 
 #include <ctype.h>
+#include <time.h>
 #include "micastiyo.h"
 
 int main(){
+    char opc_menuPrincipal[3];
     
     do{
+        if( DatosCuenta._SESSION_ == 1)
+        _obtener_mis_datos_de_la_cuenta_();
+
         BORRAR_LA_PANTALLA;
         opciones_menu_principal();
         SEPARADOR;
@@ -16,61 +21,67 @@ int main(){
         SALTO_DE_LINEA;
         fflush(stdin); // Liberar el teclado
         TAB; printf("Seleccione una opcion > ");
-        scanf("%c",&opc_menuPrincipal);
+        gets(opc_menuPrincipal);
 
-        switch (opc_menuPrincipal)
+        switch (atoi(opc_menuPrincipal))
         {
-            case '1':{
+            case 1:{
                 if( DatosCuenta._SESSION_ == 1 )
                     fnc_menu_cerrar_session();
                 else
                     fnc_menu_iniciar_session();
             }break;
 
-            case '2':{
+            case 2:{
                 if( DatosCuenta._SESSION_ == 1)
                     fn_menu_ver_mis_datos();
             }break;
 
-            case '3':{
+            case 3:{
                 if( DatosCuenta._SESSION_ == 1)
-                    fn_menu_ver_transferencias_enviados();
+                    _ver_actividades_("301", "Ver transacciones enviados");
             }break;
 
-            case '4':{
+            case 4:{
                 if( DatosCuenta._SESSION_ == 1)
-                    fn_menu_ver_transferencias_recibidos();
+                    _ver_actividades_("302", "Ver transacciones recibidos");
             }break;
 
-            case '5':{
+            case 5:{
                 if( DatosCuenta._SESSION_ == 1)
-                    fn_menu_ver_depositos();
+                    _ver_actividades_("200", "Ver depositos");
             }break;
 
-            case '6':{
+            case 6:{
                 if( DatosCuenta._SESSION_ == 1)
-                    fn_menu_ver_retiro_de_depositos();
+                    _ver_actividades_("400","Ver retiro de deposito");
             }break;
 
-            case '7':{
+            case 7:{
+                if( DatosCuenta._SESSION_ == 1)
+                    _ver_actividades_("101","Ver mas actividades");
+
+            }break;
+
+            case 8:{
                 if( DatosCuenta._SESSION_ == 1)
                 fnc_menu_transferencia();
 
             }break;
 
-            case '8':{
+            case 9:{
                 if( DatosCuenta._SESSION_ == 1)
                 fnc_menu_deposito();
             }break;
 
-            case '9':{
+            case 10:{
                 if( DatosCuenta._SESSION_ == 1 )
                 fnc_menu_retiro_deposito();
             }break;
 
         }
 
-    }while ( opc_menuPrincipal != '0');
+    }while (  strcmp( opc_menuPrincipal, "0") !=  0);
     
 
     // Mostrar mensaje cuando sale del programa
