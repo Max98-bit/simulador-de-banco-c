@@ -656,22 +656,17 @@ void _realizar_transaccion_(double deposito, int posicion){
     bufferOUT = strlen(xCampos) - 1;
     strtok( xCampos, "~");
     estadoDCuenta = atof(xCampos);
-    sprintf(sbufferINT, "%.2lf~ Deposito: No borrar, ni modificar",
+    sprintf(sbufferINT, "%.2lf~: No borrar",
     deposito + estadoDCuenta );
     bufferINT = strlen(sbufferINT);
 
     fseek( bd_castiyo, (iBuffer - bufferOUT), SEEK_SET );
-    if( bufferINT >= bufferOUT ){
-        strcat(sbufferINT, "\n");
-        fputs(sbufferINT, bd_castiyo);
-    }else{
-        int iBufferFaltante = bufferOUT - bufferINT;
-        for(i = 1; i <= iBufferFaltante; i++){
-            strcat(sbufferINT, "*");
-        }
-        strcat( sbufferINT,"\n");
-        fputs(sbufferINT, bd_castiyo);
+    int iBufferFaltante = bufferOUT - bufferINT;
+    for(i = 1; i <= iBufferFaltante; i++){
+        strcat(sbufferINT, "*");
     }
+    strcat( sbufferINT,"\n");
+    fputs(sbufferINT, bd_castiyo);
 
     fclose(bd_castiyo);
 
@@ -701,9 +696,13 @@ void _actualizar_mi_estado_de_cuenta_(){
     FILE *bd_castiyo = fopen(".%%CASTIyO%%", "rw+");
     char xCampos[250], sbufferINT[250];
     int iBuffer, bufferOUT, bufferINT;
+    int iFilas, cantidad_usuarios;
     
     // Obtener cantidad de usuarios registrados
     fgets(xCampos, 250, bd_castiyo);
+    strtok(xCampos,"#");
+    cantidad_usuarios = atoi(xCampos);
+    iFilas = cantidad_usuarios * 10;
 
     int i;
     for( i = 1; i <= (DatosCuenta.posicionDDatos+8); i++ ){
@@ -712,22 +711,17 @@ void _actualizar_mi_estado_de_cuenta_(){
     }
 
     bufferOUT = strlen(xCampos) - 1;
-    sprintf(sbufferINT, "%.2lf~ Deposito: No borrar, ni modificar",
+    sprintf(sbufferINT, "%.2lf~: No borrar",
     DatosCuenta.estadoDCuenta_tmp);
     bufferINT = strlen(sbufferINT);
 
     fseek( bd_castiyo, (iBuffer - bufferOUT), SEEK_SET );
-    if( bufferINT >= bufferOUT ){
-        strcat(sbufferINT, "\n");
-        fputs(sbufferINT, bd_castiyo);
-    }else{
-        int iBufferFaltante = bufferOUT - bufferINT;
-        for(i = 1; i <= iBufferFaltante; i++){
-            strcat(sbufferINT, "*");
-        }
-        strcat( sbufferINT,"\n");
-        fputs(sbufferINT, bd_castiyo);
+    int iBufferFaltante = bufferOUT - bufferINT;
+    for(i = 1; i <= iBufferFaltante; i++){
+        strcat(sbufferINT, "*");
     }
+    strcat( sbufferINT,"\n");
+    fputs(sbufferINT, bd_castiyo);
 
     fclose(bd_castiyo);
 }

@@ -821,7 +821,7 @@ void fnc_deposito_de_cuentas(){
                         char cAsunto[100];
                         sprintf(cAsunto, "Deposito: Solicitud aprobada");
                         char cDescripcion[100];
-                        sprintf( cDescripcion, "Monto: (+) %.2lf", x_deposito );
+                        sprintf( cDescripcion, "Monto: (+) $%.2lf", x_deposito );
                         _registrar_actividad_(Usuarios[i].ID, cAsunto, cDescripcion, 200);
 
                         SALTO_DE_LINEA;

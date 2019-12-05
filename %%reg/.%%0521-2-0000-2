@@ -1,84 +1,25 @@
-14# : No borrar, ni modificar100~ : No borrar, ni modificar
-Mon May 06 08:59:08 2019~ : No borrar, ni modificar
+4# : No borrar, ni modificar
+100~ : No borrar, ni modificar
+Fri May 10 22:15:10 2019~ : No borrar, ni modificar
 Banco: CASTIyO~ : No borrar, ni modificar
 Cuenta: Creado~ : No borrar, ni modificar
-Deposito: 0.00~ : No borrar, ni modificar
+Deposito: 10000.00~ : No borrar, ni modificar
 2~##########################################################
-200~ : No borrar, ni modificar
-Fri May 10 06:52:54 2019~ : No borrar, ni modificar
+301~ : No borrar, ni modificar
+Fri May 10 22:18:57 2019~ : No borrar, ni modificar
 Banco: CASTIyO~ : No borrar, ni modificar
-Desposito: Solicitud aprobada~ : No borrar, ni modificar
-Monto: (+) $100.00~ : No borrar, ni modificar
+Transferencia enviado: 0521-1-0000-1~ : No borrar, ni modificar
+Monto: (-) $5000.00~ : No borrar, ni modificar
 ###############################################################
 200~ : No borrar, ni modificar
-Fri May 10 06:53:57 2019~ : No borrar, ni modificar
+Fri May 10 22:20:15 2019~ : No borrar, ni modificar
 Banco: CASTIyO~ : No borrar, ni modificar
-Desposito: Solicitud aprobada~ : No borrar, ni modificar
-Monto: (+) $1000.00~ : No borrar, ni modificar
-###############################################################
-400~ : No borrar, ni modificar
-Fri May 10 06:54:51 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Retiro deposito: Solicitud aprobada~ : No borrar, ni modificar
-Monto: (-) $500.00~ : No borrar, ni modificar
+Deposito: Solicitud aprobada~ : No borrar, ni modificar
+Monto: (+) $200.00~ : No borrar, ni modificar
 ###############################################################
 301~ : No borrar, ni modificar
-Fri May 10 06:56:52 2019~ : No borrar, ni modificar
+Fri May 10 22:24:43 2019~ : No borrar, ni modificar
 Banco: CASTIyO~ : No borrar, ni modificar
-Transferecia enviado: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (-) $200.00~ : No borrar, ni modificar
-###############################################################
-302~ : No borrar, ni modificar
-Fri May 10 16:49:40 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia recibido: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (+) $100.00~ : No borrar, ni modificar
-###############################################################
-302~ : No borrar, ni modificar
-Fri May 10 17:14:31 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia recibido: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (+) $-200.00~ : No borrar, ni modificar
-###############################################################
-302~ : No borrar, ni modificar
-Fri May 10 17:24:35 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia recibido: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (+) $100.00~ : No borrar, ni modificar
-###############################################################
-302~ : No borrar, ni modificar
-Fri May 10 17:25:57 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia recibido: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (+) $100.00~ : No borrar, ni modificar
-###############################################################
-301~ : No borrar, ni modificar
-Fri May 10 17:29:09 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia enviado: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (-) $400.00~ : No borrar, ni modificar
-###############################################################
-302~ : No borrar, ni modificar
-Fri May 10 17:42:18 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia recibido: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (+) $100.00~ : No borrar, ni modificar
-###############################################################
-302~ : No borrar, ni modificar
-Fri May 10 17:51:19 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia recibido: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (+) $100.00~ : No borrar, ni modificar
-###############################################################
-302~ : No borrar, ni modificar
-Fri May 10 17:51:42 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Transferencia recibido: 0521-1-2101-1~ : No borrar, ni modificar
-Monto: (+) $100.00~ : No borrar, ni modificar
-###############################################################
-400~ : No borrar, ni modificar
-Fri May 10 18:37:23 2019~ : No borrar, ni modificar
-Banco: CASTIyO~ : No borrar, ni modificar
-Retiro deposito: Solicitud aprobada~ : No borrar, ni modificar
-Monto: (-) $500.00~ : No borrar, ni modificar
+Transferencia enviado: 0521-1-0000-1~ : No borrar, ni modificar
+Monto: (-) $5000.00~ : No borrar, ni modificar
 ###############################################################
